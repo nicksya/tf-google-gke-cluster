@@ -16,7 +16,7 @@ resource "google_container_cluster" "this" {
   # Set initial node count (required, but will remove default pool)
   initial_node_count       = 1
   # Remove default node pool to use custom node pools instead
-  remove_default_node_pool = true
+  remove_default_node_pool = false
 
   # Workload Identity configuration for GKE
   workload_identity_config {
@@ -28,26 +28,6 @@ resource "google_container_cluster" "this" {
     workload_metadata_config {
       mode = "GKE_METADATA"
     }
-  }
-}
-
-# Create a custom node pool for the GKE cluster
-resource "google_container_node_pool" "this" {
-  # Name of the node pool
-  name       = var.GKE_POOL_NAME
-  # GCP project to use (derived from the cluster)
-  project    = google_container_cluster.this.project
-  # Attach node pool to the created cluster
-  cluster    = google_container_cluster.this.name
-  # Location (region)
-  location   = google_container_cluster.this.location
-  # Number of nodes in the pool
-  node_count = var.GKE_NUM_NODES
-
-  # Node configuration
-  node_config {
-    # Machine type for the nodes
-    machine_type = var.GKE_MACHINE_TYPE
   }
 }
 
