@@ -14,9 +14,10 @@ resource "google_container_cluster" "this" {
   location = var.GOOGLE_REGION
 
   # Set initial node count (required, but will remove default pool)
-  initial_node_count       = 1
+  initial_node_count       = var.GKE_NUM_NODES
   # Remove default node pool to use custom node pools instead
   remove_default_node_pool = false
+  deletion_protection = false
 
   # Workload Identity configuration for GKE
   workload_identity_config {
